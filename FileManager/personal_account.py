@@ -17,19 +17,18 @@ import shutil
 import platform
 import sys
 from famous_info import person_and_question
-
+import os
 print('1. создать папку;')
 print('2.  удалить (файл/папку);')
 print('3. копировать (файл/папку);')
 print('4. просмотр содержимого рабочей директории;')
-print('5. посмотреть только папки;')
+print('5. сохранить содержимое рабочей директории в файл;')
 print('6. посмотреть только файлы;')
 print('7. просмотр информации об операционной системе;')
 print('8. создатель программы;')
 print('9. играть в викторину;')
 print('10. мой банковский счет;')
-print('11. смена рабочей директории;')
-print('12. выход.')
+print('11. выход.')
 
 choice = input('Выберите пункт меню')
 if choice == '1':
@@ -48,6 +47,14 @@ elif choice == '3':
 
 elif choice == '4':
     print(os.getcwd())
+
+elif choice == '5':
+    with open('listdir.txt', 'w') as f:
+        foldirs = [e for e in os.listdir() if os.path.isdir(e)]
+        f.write(f'dirs: {foldirs} \n')
+    with open('listdir.txt', 'a') as f:
+        filename = [e for e in os.listdir() if os.path.isfile(e)]
+        f.write(f'files: {filename} , ')
 
 elif choice == '6':
     print(os.listdir())
@@ -68,7 +75,11 @@ elif choice == '9':
 elif choice == '10':
     my_account = 0
     checklist = []
-
+    my_accounts = []
+    if os.path.exists('cheklist.txt'):
+        with open('cheklist.txt', 'r') as f:
+            for names in f:
+                checklist.append(names.replace('\n', ''))
     while True:
         print('1. пополнение счета')
         print('2. покупка')
@@ -80,6 +91,7 @@ elif choice == '10':
         if choice == '1':
             sum = int(input('Введите сумму'))
             my_account += sum
+            my_accounts.append(sum)
 
         elif choice == '2':
             sum = int(input('Введите сумму покупки'))
@@ -88,18 +100,23 @@ elif choice == '10':
             else:
                 my_account -= sum
                 name = input('Введите название покупки')
-                checklist.append((name, sum, my_account))
+                checklist.append(name)
 
         elif choice == '3':
             print('История покупок: ', checklist)
         elif choice == '4':
+            with open('sum.txt', 'w') as f:
+                for sum in my_accounts:
+                    f.write(f'{my_account}\n')
+            with open('cheklist.txt', 'w') as f:
+                for name in checklist:
+                    f.write(f'{name}\n')
             break
         else:
             print('Неверный пункт меню')
 
 elif choice == '11':
     sys.exit()
-
 
 
 
